@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Tabela de pagamento de contas</title>
+  <style>
+    table {
+      border-collapse: collapse;
+    }
+    
+    th, td {
+      border: 1px solid black;
+    }
+    
+    .nota {
+      width: 50px;
+      height: 50px;
+    }
+  </style>
+</head>
+<body>
+  <table>
+    <thead>
+      <tr>
+        <th>Descrição</th>
+        <th>Valor</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Luz</td>
+        <td><input type="text" name="valor_luz" id="valor_luz" value="0" /></td>
+      </tr>
+      <tr>
+        <td>Água</td>
+        <td><input type="text" name="valor_agua" id="valor_agua" value="0" /></td>
+      </tr>
+      <tr>
+        <td>Gás</td>
+        <td><input type="text" name="valor_gas" id="valor_gas" value="0" /></td>
+      </tr>
+      <tr>
+        <td>Aluguel</td>
+        <td><input type="text" name="valor_aluguel" id="valor_aluguel" value="0" /></td>
+      </tr>
+      <tr>
+        <td>Telefone</td>
+        <td><input type="text" name="valor_telefone" id="valor_telefone" value="0" /></td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <th>Nota</th>
+        <th>Quantidade</th>
+      </tr>
+    </tfoot>
+  </table>
+
+  <script>
+    function calcular() {
+      let valor_total = 0;
+
+      for (let i = 0; i < document.querySelectorAll("input").length; i++) {
+        let valor = document.querySelectorAll("input")[i].value;
+
+        if (valor > 0) {
+          valor_total += valor;
+        }
+      }
+
+      // Calcula a quantidade de notas de cada valor
+      let notas = [];
+
+      for (let i = 50; i >= 2; i--) {
+        let quantidade = Math.floor(valor_total / i);
+
+        if (quantidade > 0) {
+          notas.push([i, quantidade]);
+        }
+
+        valor_total -= quantidade * i;
+      }
+
+      // Exibe as notas
+      let div_notas = document.querySelector(".notas");
+      div_notas.innerHTML = "";
+
+      for (let nota of notas) {
+        let img = document.createElement("img");
+        img.src = `img/nota/${nota[0]}.png`;
+        img.width = 50;
+        img.height = 50;
+        img.alt = `Nota de ${nota[0]} reais`;
+
+        div_notas.appendChild(img);
+      }
+
+      // Exibe a coluna de notas
+      let div_notas = document.querySelector("tfoot");
+      div_notas.innerHTML = "";
+
+      for (let nota of notas) {
+        let tr = document.createElement("tr");
+        tr.appendChild(document.createElement("td").textContent = nota[0]);
+        tr.appendChild(document.createElement("td").textContent = nota[1]);
+
+        div_notas.appendChild(tr);
+      }
+    }
+
+    document.querySelector("#calcular").addEventListener("click", calcular);
+  </script>
+</body>
+</html>
